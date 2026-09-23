@@ -305,3 +305,8 @@ Le déploiement sera réalisé uniquement après la validation de la version fin
 ## Dépôt GitHub
 
 https://github.com/Zbiwoo/fantasyrealm-character-manager
+## Gestion de projet
+
+Le suivi du projet FantasyRealm Online est disponible sur GitHub Projects :
+
+https://github.com/users/Zbiwoo/projects/2
