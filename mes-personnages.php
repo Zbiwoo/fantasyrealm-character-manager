@@ -16,6 +16,111 @@ if (!isset($_SESSION['user_id'])) {
 
 
 /* ==================================================
+   DUPLIQUER UN PERSONNAGE
+================================================== */
+
+$messageDuplication = '';
+$erreurDuplication = '';
+
+if (isset($_POST['dupliquer'])) {
+
+    $idPersonnage = (int)($_POST['personnage_id'] ?? 0);
+    $nouveauNom = trim($_POST['nouveau_nom'] ?? '');
+
+    if ($nouveauNom === '') {
+        $erreurDuplication = 'Le nouveau nom est obligatoire.';
+    } elseif (mb_strlen($nouveauNom, 'UTF-8') > 100) {
+        $erreurDuplication = 'Le nom ne peut pas dépasser 100 caractères.';
+    } else {
+
+        $verificationNom = $pdo->prepare(
+            "SELECT id FROM personnages WHERE LOWER(nom) = LOWER(:nom) LIMIT 1"
+        );
+        $verificationNom->execute(['nom' => $nouveauNom]);
+
+        if ($verificationNom->fetch()) {
+            $erreurDuplication = 'Ce nom est déjà utilisé. Choisissez un autre nom.';
+        } else {
+
+            $requeteOriginal = $pdo->prepare(
+                "SELECT * FROM personnages
+                 WHERE id = :id
+                 AND utilisateur_id = :utilisateur_id
+                 LIMIT 1"
+            );
+            $requeteOriginal->execute([
+                'id' => $idPersonnage,
+                'utilisateur_id' => $_SESSION['user_id']
+            ]);
+
+            $original = $requeteOriginal->fetch(PDO::FETCH_ASSOC);
+
+            if (!$original) {
+                $erreurDuplication = 'Personnage introuvable.';
+            } else {
+
+                try {
+                    $pdo->beginTransaction();
+
+                    $requeteDuplication = $pdo->prepare(
+                        "INSERT INTO personnages
+                        (utilisateur_id, nom, genre, modele_visuel, image, visage,
+                         couleur_cheveux, couleur_yeux, coiffure, forme_yeux,
+                         statut_nom, partage, motif_refus)
+                         VALUES
+                        (:utilisateur_id, :nom, :genre, :modele_visuel, :image, :visage,
+                         :couleur_cheveux, :couleur_yeux, :coiffure, :forme_yeux,
+                         'en_attente', 0, NULL)"
+                    );
+
+                    $requeteDuplication->execute([
+                        'utilisateur_id' => $_SESSION['user_id'],
+                        'nom' => $nouveauNom,
+                        'genre' => $original['genre'],
+                        'modele_visuel' => $original['modele_visuel'],
+                        'image' => $original['image'],
+                        'visage' => $original['visage'],
+                        'couleur_cheveux' => $original['couleur_cheveux'],
+                        'couleur_yeux' => $original['couleur_yeux'],
+                        'coiffure' => $original['coiffure'],
+                        'forme_yeux' => $original['forme_yeux']
+                    ]);
+
+                    $nouvelId = (int)$pdo->lastInsertId();
+
+                    $copieElements = $pdo->prepare(
+                        "INSERT INTO personnage_elements (personnage_id, element_id)
+                         SELECT :nouvel_id, element_id
+                         FROM personnage_elements
+                         WHERE personnage_id = :ancien_id"
+                    );
+                    $copieElements->execute([
+                        'nouvel_id' => $nouvelId,
+                        'ancien_id' => $idPersonnage
+                    ]);
+
+                    $pdo->commit();
+
+                    header('Location: mes-personnages.php?duplication=ok');
+                    exit;
+
+                } catch (Throwable $e) {
+                    if ($pdo->inTransaction()) {
+                        $pdo->rollBack();
+                    }
+                    $erreurDuplication = 'Une erreur est survenue pendant la duplication.';
+                }
+            }
+        }
+    }
+}
+
+if (isset($_GET['duplication']) && $_GET['duplication'] === 'ok') {
+    $messageDuplication = 'Personnage dupliqué ! Son nouveau nom est maintenant en attente de validation.';
+}
+
+
+/* ==================================================
    PARTAGER UN PERSONNAGE
 ================================================== */
 
@@ -166,6 +271,55 @@ function imagePersonnage($nom)
         href="assets/CSS/style.css"
     >
 
+
+    <style>
+        .duplication-message {
+            max-width: 1100px;
+            margin: 0 auto 20px;
+            padding: 14px 18px;
+            border: 1px solid #C6A15B;
+            border-radius: 8px;
+            background: rgba(41, 31, 47, 0.95);
+            color: #F5F0F6;
+        }
+
+        .duplication-error {
+            border-color: #d46a6a;
+        }
+
+        .duplicate-character-form {
+            margin-top: 14px;
+        }
+
+        .duplicate-character-form label {
+            display: block;
+            margin-bottom: 7px;
+            font-size: 0.85rem;
+        }
+
+        .duplicate-character-row {
+            display: flex;
+            gap: 8px;
+            align-items: stretch;
+        }
+
+        .duplicate-character-row input {
+            min-width: 0;
+            flex: 1;
+            padding: 10px 12px;
+            border: 1px solid #C6A15B;
+            border-radius: 6px;
+            background: #F5F0F6;
+            color: #291F2F;
+        }
+
+        @media (max-width: 600px) {
+            .duplicate-character-row {
+                flex-direction: column;
+            }
+        }
+    </style>
+
 </head>
 
 
@@ -176,6 +330,18 @@ function imagePersonnage($nom)
 
 
 <main class="my-characters-page">
+
+    <?php if ($messageDuplication !== '') { ?>
+        <div class="duplication-message duplication-success">
+            <?php echo htmlspecialchars($messageDuplication); ?>
+        </div>
+    <?php } ?>
+
+    <?php if ($erreurDuplication !== '') { ?>
+        <div class="duplication-message duplication-error">
+            <?php echo htmlspecialchars($erreurDuplication); ?>
+        </div>
+    <?php } ?>
 
 
     <section class="my-characters-header">
@@ -436,6 +602,43 @@ function imagePersonnage($nom)
 
                         <?php } ?>
 
+
+
+                   <form
+    method="POST"
+    action=""
+    class="duplicate-character-form"
+>
+
+    <input
+        type="hidden"
+        name="personnage_id"
+        value="<?php echo (int)$personnage['id']; ?>"
+    >
+
+    <h3 class="duplicate-character-title">
+        DUPLIQUER VOTRE PERSONNAGE
+    </h3>
+
+    <input
+        type="text"
+        id="nouveau_nom_<?php echo (int)$personnage['id']; ?>"
+        name="nouveau_nom"
+        maxlength="100"
+        required
+        placeholder="Nouveau nom unique"
+        aria-label="Nouveau nom du personnage dupliqué"
+    >
+
+    <button
+        type="submit"
+        name="dupliquer"
+        class="duplicate-character-button"
+    >
+        DUPLIQUER
+    </button>
+
+</form>
 
 
                         <form
