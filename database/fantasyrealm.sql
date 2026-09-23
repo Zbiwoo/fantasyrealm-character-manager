@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1
--- Généré le : ven. 18 sep. 2026 à 11:27
+-- Généré le : mer. 23 sep. 2026 à 13:27
 -- Version du serveur : 10.4.32-MariaDB
 -- Version de PHP : 8.2.12
 
@@ -42,7 +42,9 @@ CREATE TABLE `commentaires` (
 --
 
 INSERT INTO `commentaires` (`id`, `personnage_id`, `utilisateur_id`, `commentaire`, `note`, `statut`, `date_creation`) VALUES
-(1, 4, 1, 'Trop belle', 5, 'valide', '2026-09-17 19:51:10');
+(1, 4, 1, 'Trop belle', 5, 'valide', '2026-09-17 19:51:10'),
+(2, 7, 3, 'magnifiqueee', 5, 'valide', '2026-09-22 22:12:30'),
+(3, 7, 5, 'belle', 5, 'valide', '2026-09-23 12:00:06');
 
 -- --------------------------------------------------------
 
@@ -86,6 +88,7 @@ CREATE TABLE `personnages` (
   `utilisateur_id` int(11) NOT NULL,
   `nom` varchar(100) NOT NULL,
   `genre` varchar(20) NOT NULL,
+  `modele_visuel` varchar(20) NOT NULL DEFAULT 'guerriere',
   `visage` varchar(50) DEFAULT NULL,
   `couleur_cheveux` varchar(50) DEFAULT NULL,
   `couleur_yeux` varchar(50) DEFAULT NULL,
@@ -101,12 +104,12 @@ CREATE TABLE `personnages` (
 -- Déchargement des données de la table `personnages`
 --
 
-INSERT INTO `personnages` (`id`, `utilisateur_id`, `nom`, `genre`, `visage`, `couleur_cheveux`, `couleur_yeux`, `coiffure`, `forme_yeux`, `date_creation`, `statut_nom`, `partage`, `motif_refus`) VALUES
-(1, 1, 'Mage Noire', 'Femme', 'Normal', '#2d0047', '#000000', 'Long', 'Etroits', '2026-09-17 14:14:13', 'valide', 1, NULL),
-(4, 1, 'Guerrière', 'Femme', NULL, NULL, NULL, NULL, NULL, '2026-09-17 18:56:32', 'valide', 1, NULL),
-(5, 1, 'Archère', 'Femme', NULL, NULL, NULL, NULL, NULL, '2026-09-17 18:56:32', 'valide', 1, NULL),
-(6, 1, 'Sorcière', 'Femme', NULL, NULL, NULL, NULL, NULL, '2026-09-17 18:56:32', 'valide', 1, NULL),
-(7, 3, 'Nyxaria', 'Femme', 'Normal', '#09011e', '#000000', 'Tresse', 'Ronds', '2026-09-17 22:55:36', 'valide', 1, NULL);
+INSERT INTO `personnages` (`id`, `utilisateur_id`, `nom`, `genre`, `modele_visuel`, `visage`, `couleur_cheveux`, `couleur_yeux`, `coiffure`, `forme_yeux`, `date_creation`, `statut_nom`, `partage`, `motif_refus`) VALUES
+(1, 1, 'Mage Noire', 'Femme', 'guerriere', 'Normal', '#2d0047', '#000000', 'Long', 'Etroits', '2026-09-17 14:14:13', 'valide', 1, NULL),
+(4, 1, 'Guerrière', 'Femme', 'guerriere', NULL, NULL, NULL, NULL, NULL, '2026-09-17 18:56:32', 'valide', 1, NULL),
+(5, 1, 'Archère', 'Femme', 'guerriere', NULL, NULL, NULL, NULL, NULL, '2026-09-17 18:56:32', 'valide', 1, NULL),
+(6, 1, 'Sorcière', 'Femme', 'guerriere', NULL, NULL, NULL, NULL, NULL, '2026-09-17 18:56:32', 'valide', 1, NULL),
+(7, 3, 'Nyxaria', 'Femme', 'guerriere', 'Normal', '#09011e', '#000000', 'Tresse', 'Ronds', '2026-09-17 22:55:36', 'valide', 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -154,7 +157,8 @@ INSERT INTO `utilisateurs` (`id`, `pseudo`, `email`, `mot_de_passe`, `role`, `su
 (2, 'Employe1', 'employe1@test.fr', '$2y$10$uXSL6jm.XjAoTdrzf90WheLMMwjs3/63K5G45NSyT4WlsrG2sIxEi', 'employe', 0, NULL, NULL),
 (3, 'fantasyo447', 'fantasyo447@gmail.com', '$2y$10$kLN46RAmrTz2ra.ApkzKFen1OrApIe9aWN.JHSmCnQXn6kX56B55W', 'utilisateur', 0, NULL, NULL),
 (4, 'Testeur2', 'testeur2@test.fr', '$2y$10$N1NvEo45TCJ7TY8xTtXSgOLVcxAfPiyXQbUsjyXSTuy3XwpR2QM3a', 'utilisateur', 0, NULL, NULL),
-(5, 'admin', 'admin@fantasyrealm.fr', '$2y$10$sAZQt8SNG4qy/e7sspzRFuFp99/23OHl5Wm9wOSZQAIUyuUZa7VHK', 'admin', 0, NULL, NULL);
+(5, 'admin', 'admin@fantasyrealm.fr', '$2y$10$sAZQt8SNG4qy/e7sspzRFuFp99/23OHl5Wm9wOSZQAIUyuUZa7VHK', 'admin', 0, NULL, NULL),
+(8, 'EmployeMongo', 'employemongo@test.fr', '$2y$10$wawsMtXYghdq8Ro.ETfokuHzAL.u1LBzB4GvtGxmB445kHoESwK3u', 'employe', 0, NULL, NULL);
 
 --
 -- Index pour les tables déchargées
@@ -205,25 +209,25 @@ ALTER TABLE `utilisateurs`
 -- AUTO_INCREMENT pour la table `commentaires`
 --
 ALTER TABLE `commentaires`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `elements_personnalisation`
 --
 ALTER TABLE `elements_personnalisation`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT pour la table `personnages`
 --
 ALTER TABLE `personnages`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT pour la table `utilisateurs`
 --
 ALTER TABLE `utilisateurs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- Contraintes pour les tables déchargées
