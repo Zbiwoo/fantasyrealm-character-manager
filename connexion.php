@@ -99,8 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $utilisateur['role'];
 
 
-            header('Location: index.php');
-            exit;
+            header('Location: profil.php');
+exit;
         }
     }
 }
