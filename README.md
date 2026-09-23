@@ -380,3 +380,9 @@ https://github.com/Zbiwoo/fantasyrealm-character-manager
 ## Auteur
 
 Projet réalisé dans le cadre de mon ECF **Graduate Développeur Web Gaming**.
+
+## 🌐 Site en ligne
+
+Le projet est accessible en ligne à l'adresse suivante :
+
+https://fantasyrealm-online.xo.je/
