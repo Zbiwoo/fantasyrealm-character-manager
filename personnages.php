@@ -147,7 +147,7 @@ $personnages =
    utilisent une image fantasy par défaut.
 ================================================== */
 
-function obtenirImagePersonnage($nom)
+function obtenirImagePersonnage($nom, $imageBDD = null)
 {
     $nomImage = mb_strtolower(
         trim($nom),
@@ -189,8 +189,18 @@ function obtenirImagePersonnage($nom)
 
 
     /*
-       Image utilisée par défaut pour
-       un personnage créé par un joueur.
+       Pour tous les autres personnages :
+       utiliser l'image enregistrée en base de données.
+    */
+
+    $imageBDD = trim((string) $imageBDD);
+
+    if ($imageBDD !== '') {
+        return 'assets/images/' . basename($imageBDD);
+    }
+
+    /*
+       Secours si aucune image n'est encore attribuée.
     */
 
     return 'assets/images/mage_noir.png';
@@ -420,7 +430,8 @@ function formaterNomPersonnage($nom)
 
                 $imagePersonnage =
                     obtenirImagePersonnage(
-                        $personnage['nom']
+                        $personnage['nom'],
+                        $personnage['image'] ?? null
                     );
 
                 $nomPersonnage =

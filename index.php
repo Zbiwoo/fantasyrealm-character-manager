@@ -26,6 +26,8 @@ session_start();
 
 <body class="home-page">
 
+<div id="fantasy-sparkles" aria-hidden="true"></div>
+
 <?php include 'navbar.php'; ?>
 
     <main>
@@ -231,6 +233,55 @@ session_start();
 
     </footer>
 
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    const sparkleContainer = document.getElementById('fantasy-sparkles');
+
+    if (!sparkleContainer) {
+        return;
+    }
+
+    function createSparkle() {
+        const sparkle = document.createElement('span');
+        sparkle.className = 'fantasy-sparkle';
+
+        sparkle.style.left = (Math.random() * 100) + '%';
+        sparkle.style.top = (Math.random() * document.body.scrollHeight) + 'px';
+
+        const size = (Math.random() * 4) + 2;
+        sparkle.style.width = size + 'px';
+        sparkle.style.height = size + 'px';
+
+        const duration = (Math.random() * 2) + 2;
+        sparkle.style.animationDuration = duration + 's';
+
+        const drift = (Math.random() * 40) - 20;
+        sparkle.style.setProperty('--sparkle-drift', drift + 'px');
+
+        sparkleContainer.appendChild(sparkle);
+
+        window.setTimeout(function () {
+            sparkle.remove();
+        }, duration * 1000);
+    }
+
+    for (let i = 0; i < 35; i++) {
+        window.setTimeout(createSparkle, Math.random() * 1200);
+    }
+
+    window.setInterval(function () {
+        createSparkle();
+
+        if (Math.random() > 0.35) {
+            createSparkle();
+        }
+    }, 250);
+
+});
+</script>
 
 </body>
 

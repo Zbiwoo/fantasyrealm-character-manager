@@ -167,6 +167,13 @@ $nomPersonnage = mb_strtolower($personnage['nom']);
 
 $imagePersonnage = 'mage_noir.png';
 
+/*
+   Pour les personnages qui ne font pas partie des
+   4 personnages de démonstration, une image peut
+   maintenant être enregistrée directement en BDD.
+*/
+$imageBDD = trim($personnage['image'] ?? '');
+
 $accessoires = [
     [
         'icone' => '⚔',
@@ -313,6 +320,10 @@ if ($nomPersonnage === 'mage noire') {
                 'Une relique mystique qui augmente la puissance des sortilèges.'
         ]
     ];
+
+} elseif ($imageBDD !== '') {
+
+    $imagePersonnage = $imageBDD;
 }
 
 ?>

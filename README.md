@@ -371,6 +371,12 @@ La personnalisation visuelle des traits du personnage fait encore l'objet d'une 
 
 ---
 
+## Dépôt GitHub
+
+Le code source du projet est disponible sur GitHub :
+
+https://github.com/Zbiwoo/fantasyrealm-character-manager
+
 ## Auteur
 
 Projet réalisé dans le cadre de mon ECF **Graduate Développeur Web Gaming**.
