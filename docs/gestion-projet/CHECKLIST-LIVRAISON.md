@@ -12,6 +12,7 @@
 - [x] Création d'un personnage
 - [x] Gestion de ses personnages
 - [x] Personnalisation enregistrée en base de données
+- [ ] Finalisation de l'affichage visuel des traits du personnage
 - [x] Équipements et pouvoirs
 - [x] Partage / retrait du partage
 - [x] Suppression d'un personnage
@@ -31,12 +32,12 @@
 - [x] Consultation des commentaires en attente
 - [x] Validation des commentaires
 - [x] Refus des commentaires
-- [ ] Email après validation / refus d'un personnage
-- [ ] Motif de refus envoyé au propriétaire
-- [ ] Gestion des équipements et pouvoirs
-- [ ] Suppression d'un personnage par un employé
-- [ ] Suspension d'un utilisateur
-- [ ] Suppression d'un utilisateur
+- [x] Email après validation / refus d'un personnage
+- [x] Motif de refus communiqué au propriétaire
+- [x] Gestion des équipements et pouvoirs
+- [x] Suppression d'un personnage par un employé
+- [x] Suspension d'un utilisateur
+- [x] Suppression d'un utilisateur
 
 ---
 
@@ -44,11 +45,11 @@
 
 - [x] Compte administrateur créé
 - [x] Accès administrateur à l'espace employé
-- [ ] Création d'un compte employé
-- [ ] Modification du mot de passe d'un employé
-- [ ] Suspension d'un employé
-- [ ] Suppression d'un employé
-- [ ] Consultation des journaux d'activité
+- [x] Création d'un compte employé
+- [x] Modification du mot de passe d'un employé
+- [x] Suspension d'un employé
+- [x] Suppression d'un employé
+- [x] Consultation des journaux d'activité
 
 ---
 
@@ -57,7 +58,7 @@
 - [x] Base relationnelle MySQL
 - [x] Relations entre les principales tables
 - [x] Export SQL présent dans `database/fantasyrealm.sql`
-- [ ] MongoDB pour la journalisation
+- [x] MongoDB pour la journalisation
 - [ ] Export SQL final après les dernières modifications
 
 ---
@@ -117,13 +118,15 @@
 
 - [x] `.gitignore`
 - [x] `mail-config.example.php`
-- [ ] Vérifier que `mail-config.php` n'est pas suivi par Git
-- [ ] Initialiser / vérifier le dépôt Git
-- [ ] Branche `main`
-- [ ] Branche `develop`
-- [ ] Branche(s) `feature/...`
-- [ ] Commits finaux
-- [ ] Dépôt GitHub public
+- [x] Vérifier que `mail-config.php` n'est pas suivi par Git
+- [x] Initialiser / vérifier le dépôt Git
+- [x] Branche `main`
+- [x] Branche `develop`
+- [x] Branche `feature/finalisation-documentation`
+- [x] Premier commit
+- [x] Dépôt GitHub public
+- [ ] Commit final après les dernières modifications
+- [x] Dépôt distant configuré
 - [ ] Ajouter l'URL GitHub dans la documentation
 
 ---
@@ -135,6 +138,7 @@
 - [ ] Importer la base de données
 - [ ] Adapter la configuration de la base de données
 - [ ] Adapter l'URL de réinitialisation du mot de passe
+- [ ] Configurer MongoDB en production
 - [ ] Tester l'envoi des emails en production
 - [ ] Tester le site en ligne
 - [ ] Ajouter l'URL du site dans la documentation
@@ -149,7 +153,7 @@
 - [ ] Vérifier les contrastes principaux
 - [ ] Vérifier les messages d'erreur
 - [ ] Vérifier l'affichage mobile
-- [ ] Vérifier qu'aucun identifiant privé n'est publié
+- [x] Vérifier que les informations SMTP privées sont exclues de Git
 
 ---
 
@@ -161,10 +165,13 @@
 - [ ] Tester inscription / connexion / déconnexion
 - [ ] Tester mot de passe oublié
 - [ ] Tester création et personnalisation d'un personnage
+- [ ] Tester la personnalisation visuelle finale
 - [ ] Tester validation / refus
+- [ ] Tester les emails de validation / refus
 - [ ] Tester partage / retrait du partage
 - [ ] Tester commentaires et modération
 - [ ] Tester formulaire de contact
+- [ ] Tester les journaux MongoDB
 - [ ] Tester tous les liens de navigation
 - [ ] Vérifier qu'aucune erreur PHP n'apparaît
 - [ ] Vérifier les pages desktop et mobile
@@ -173,12 +180,16 @@
 
 ## Avant l'envoi définitif
 
+- [ ] Finalisation de la personnalisation visuelle
 - [ ] Export SQL définitif
 - [ ] README principal à jour
-- [ ] Documentation technique à jour
-- [ ] Gestion de projet à jour
+- [x] Documentation technique à jour
+- [x] Gestion de projet à jour
 - [ ] Manuel utilisateur final
 - [ ] Liens GitHub et site déployé ajoutés
 - [ ] Aucun mot de passe ou identifiant privé dans le dépôt
 - [ ] Dernier test complet
+- [ ] Commit final
+- [ ] Push final sur GitHub
+- [ ] Déploiement final
 - [ ] LIVRAISON ECF

@@ -2,13 +2,15 @@
 
 ## Présentation du projet
 
-FantasyRealm Character Manager est une application web développée dans le cadre de mon ECF pour PixelVerse Studios.
+FantasyRealm Character Manager est une application web développée dans le cadre de mon ECF Graduate Développeur Web Gaming pour PixelVerse Studios.
 
 L'application permet de gérer les personnages du MMORPG fictif **FantasyRealm Online**.
 
 Les utilisateurs peuvent créer leurs propres personnages, personnaliser leur apparence, leur attribuer des équipements et des pouvoirs, puis choisir de les partager avec la communauté.
 
-Les employés disposent également d'un espace permettant de modérer les personnages et les commentaires publiés par les utilisateurs.
+Les employés disposent d'un espace permettant de modérer les personnages et les commentaires publiés par les utilisateurs.
+
+Les administrateurs disposent également d'un espace dédié à la gestion des employés et à la consultation des journaux d'activité.
 
 ---
 
@@ -36,10 +38,24 @@ Les employés disposent également d'un espace permettant de modérer les person
 - Accès à un espace réservé
 - Consultation des personnages en attente
 - Validation des noms de personnages
-- Refus d'un personnage
+- Refus d'un personnage avec un motif
+- Notification du propriétaire après validation ou refus
 - Consultation des commentaires en attente
 - Validation des commentaires
 - Refus des commentaires
+- Gestion des équipements et pouvoirs
+- Gestion des utilisateurs
+- Journalisation des actions
+
+### Administrateur
+
+- Accès à l'espace d'administration
+- Création d'un compte employé
+- Modification du mot de passe d'un employé
+- Suspension d'un employé
+- Réactivation d'un employé
+- Suppression d'un employé
+- Consultation des journaux d'activité
 
 ---
 
@@ -58,14 +74,22 @@ Les employés disposent également d'un espace permettant de modérer les person
 
 ### Bases de données
 
-- MySQL
+- MySQL / MariaDB
 - MongoDB pour la journalisation des actions
+
+### Emails
+
+- PHPMailer
+- SMTP
 
 ### Outils
 
 - Visual Studio Code
 - XAMPP
+- Apache
 - phpMyAdmin
+- MongoDB Compass
+- MongoDB Shell
 - Git
 - GitHub
 - Figma
@@ -79,8 +103,10 @@ Les employés disposent également d'un espace permettant de modérer les person
 Pour lancer le projet en local, il faut installer :
 
 - XAMPP
+- MongoDB Community Server
+- MongoDB Compass ou MongoDB Shell
 - Un navigateur web
-- Git, si le projet est récupéré depuis GitHub
+- Git si le projet est récupéré depuis GitHub
 
 ---
 
@@ -96,7 +122,7 @@ C:\xampp\htdocs\fantasyrealm-character-manager
 
 ---
 
-### 3. Base de données
+### 3. Base de données MySQL
 
 Démarrer **Apache** et **MySQL** depuis XAMPP.
 
@@ -120,9 +146,9 @@ database/fantasyrealm.sql
 
 ---
 
-### 4. Configuration de la base de données
+### 4. Configuration de MySQL
 
-La connexion à MySQL est configurée dans le fichier :
+La connexion à MySQL est configurée dans :
 
 ```text
 config.php
@@ -130,11 +156,37 @@ config.php
 
 Configuration utilisée pour l'environnement local :
 
-- Hôte : localhost
-- Base de données : fantasyrealm
-- Encodage : utf8mb4
+- Hôte : `localhost`
+- Base de données : `fantasyrealm`
+- Encodage : `utf8mb4`
 
-Les identifiants devront être adaptés en fonction de l'environnement utilisé.
+Les identifiants doivent être adaptés selon l'environnement utilisé.
+
+---
+
+## Configuration de MongoDB
+
+MongoDB est utilisé pour la journalisation des actions.
+
+La base utilisée est :
+
+```text
+fantasyrealm_logs
+```
+
+La collection utilisée est :
+
+```text
+logs
+```
+
+La connexion à MongoDB est configurée dans :
+
+```text
+mongodb.php
+```
+
+MongoDB doit être démarré avant d'utiliser les fonctionnalités nécessitant l'enregistrement des journaux.
 
 ---
 
@@ -143,7 +195,10 @@ Les identifiants devront être adaptés en fonction de l'environnement utilisé.
 L'application utilise PHPMailer afin d'envoyer certains emails, notamment pour :
 
 - le formulaire de contact ;
-- la réinitialisation du mot de passe.
+- la réinitialisation du mot de passe ;
+- la validation d'un personnage ;
+- le refus d'un personnage ;
+- certaines notifications de modération.
 
 Pour des raisons de sécurité, le fichier contenant les véritables identifiants SMTP n'est pas présent dans le dépôt GitHub.
 
@@ -169,6 +224,8 @@ Puis renseigner les informations SMTP nécessaires.
 
 Démarrer Apache et MySQL avec XAMPP.
 
+Démarrer également MongoDB si les fonctionnalités de journalisation doivent être utilisées.
+
 Puis ouvrir dans le navigateur :
 
 ```text
@@ -181,6 +238,7 @@ http://localhost/fantasyrealm-character-manager/
 
 ```text
 fantasyrealm-character-manager/
+
 │
 ├── assets/
 │   ├── CSS/
@@ -192,7 +250,6 @@ fantasyrealm-character-manager/
 │
 ├── docs/
 │   ├── charte-graphique/
-│   │   └── CHARTE-GRAPHIQUE-FANTASYREALM.pdf
 │   ├── documentation-technique/
 │   ├── gestion-projet/
 │   └── manuel-utilisateur/
@@ -200,6 +257,7 @@ fantasyrealm-character-manager/
 ├── PHPMailer/
 │
 ├── config.php
+├── mongodb.php
 ├── index.php
 ├── connexion.php
 ├── inscription.php
@@ -217,6 +275,8 @@ fantasyrealm-character-manager/
 ├── mentions-legales.php
 ├── cgv.php
 ├── navbar.php
+├── mail-config.example.php
+├── .gitignore
 └── README.md
 ```
 
@@ -226,24 +286,25 @@ fantasyrealm-character-manager/
 
 La documentation du projet est regroupée dans le dossier `docs`.
 
-Elle contient ou contiendra :
+Elle contient notamment :
 
-- La charte graphique
-- La documentation technique
-- Les documents de gestion de projet
-- Le manuel utilisateur
-
-La charte graphique contient notamment la palette de couleurs, les typographies, les composants graphiques, les wireframes desktop et mobile ainsi que les maquettes desktop et mobile.
+- la charte graphique ;
+- les wireframes desktop et mobile ;
+- les maquettes desktop et mobile ;
+- la documentation technique ;
+- les diagrammes techniques ;
+- les documents de gestion de projet ;
+- le manuel utilisateur.
 
 ---
 
 ## Compte de démonstration
 
-Un compte administrateur est pré-configuré afin de permettre de tester les fonctionnalités réservées à l'administration.
+Un compte administrateur de démonstration peut être utilisé pour tester les fonctionnalités d'administration.
 
-- **Email :** admin@fantasyrealm.fr
-- **Mot de passe :** Admin123!
-- **Rôle :** Administrateur
+Les identifiants ne sont volontairement pas publiés dans ce README afin d'éviter de diffuser des informations d'authentification dans le dépôt public.
+
+Les identifiants de démonstration peuvent être communiqués séparément lors de la présentation du projet.
 
 ---
 
@@ -258,7 +319,27 @@ Plusieurs mesures sont utilisées dans l'application :
 - Contrôle des rôles utilisateur
 - Vérification de la propriété des personnages avant modification
 - Validation des données reçues depuis les formulaires
+- Protection contre l'affichage de données HTML non échappées avec `htmlspecialchars()`
 - Protection des identifiants SMTP avec `.gitignore`
+- Séparation des données relationnelles et des journaux d'activité
+
+---
+
+## Git et GitHub
+
+Le projet utilise Git pour le versionnement du code.
+
+Les principales branches utilisées sont :
+
+```text
+main
+develop
+feature/finalisation-documentation
+```
+
+Le fichier `.gitignore` permet notamment d'exclure les informations sensibles de la configuration SMTP.
+
+Le dépôt GitHub contient le code source et les documents nécessaires à la présentation du projet.
 
 ---
 
@@ -267,6 +348,26 @@ Plusieurs mesures sont utilisées dans l'application :
 L'identité visuelle de FantasyRealm Online repose sur un univers fantasy sombre avec des couleurs prune, violet et or.
 
 Les maquettes desktop et mobile ainsi que la charte graphique ont été réalisées avec Figma.
+
+L'interface utilise une feuille de style CSS personnalisée sans framework graphique externe.
+
+---
+
+## État du projet
+
+Le projet comprend actuellement :
+
+- l'application utilisateur ;
+- l'espace employé ;
+- l'espace administrateur ;
+- la base MySQL ;
+- la journalisation MongoDB ;
+- l'envoi d'emails avec PHPMailer ;
+- les documents techniques ;
+- les documents de gestion de projet ;
+- le dépôt GitHub.
+
+La personnalisation visuelle des traits du personnage fait encore l'objet d'une finalisation avant les tests définitifs et le déploiement.
 
 ---
 
