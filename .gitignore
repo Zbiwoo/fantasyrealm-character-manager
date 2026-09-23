@@ -1,0 +1,9 @@
+# Identifiants SMTP privés
+mail-config.php
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Configuration VS Code locale
+.vscode/
